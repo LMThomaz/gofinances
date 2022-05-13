@@ -19,6 +19,7 @@ import {
   TransactionsType,
 } from './styles';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import uuid from 'react-native-uuid';
 
 interface FormData {
   name: string;
@@ -63,10 +64,12 @@ export function Register() {
     }
     const { name, amount } = form;
     const newTransaction = {
+      id: String(uuid.v4()),
       name,
       amount: amount,
       category: category.key,
       transactionType,
+      date: new Date(),
     };
     try {
       const registers = await AsyncStorage.getItem(dataKey);
