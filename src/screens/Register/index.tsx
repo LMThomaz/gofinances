@@ -1,8 +1,11 @@
-import React, { useEffect, useState } from 'react';
-import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useNavigation } from '@react-navigation/native';
+import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Alert, Keyboard, Modal, TouchableWithoutFeedback } from 'react-native';
+import uuid from 'react-native-uuid';
+import * as Yup from 'yup';
 import {
   Button,
   CategorySelectButton,
@@ -18,9 +21,6 @@ import {
   Title,
   TransactionsType,
 } from './styles';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import uuid from 'react-native-uuid';
-import { useNavigation } from '@react-navigation/native';
 
 interface FormData {
   name: string;

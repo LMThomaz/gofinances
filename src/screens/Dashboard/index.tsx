@@ -1,4 +1,5 @@
-import React from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import React, { useEffect, useState } from 'react';
 import { HighlightCard } from '../../components/HighlightCard';
 import {
   TransactionCard,
@@ -28,32 +29,34 @@ export interface DataListProps extends TransactionCardProps {
 }
 
 export function Dashboard() {
-  const data: DataListProps[] = [
-    {
-      id: '1',
-      type: 'positive',
-      title: 'Desenvolvimento de site',
-      amount: 'R$ 12.000,00',
-      category: { name: 'Vendas', icon: 'dollar-sign' },
-      date: '19/03/2022',
-    },
-    {
-      id: '2',
-      type: 'negative',
-      title: 'Hamburgueria Pizzy',
-      amount: 'R$ 59,00',
-      category: { name: 'Alimentação', icon: 'coffee' },
-      date: '19/03/2022',
-    },
-    {
-      id: '3',
-      type: 'negative',
-      title: 'Aluguel do apartamento',
-      amount: 'R$ 1.200,00',
-      category: { name: 'Casa', icon: 'shopping-bag' },
-      date: '19/03/2022',
-    },
-  ];
+  const dataKey = '@go-finances:transactions';
+  const [data, setData] = useState<DataListProps[]>([]);
+  async function loadTransactions() {
+    const response = await AsyncStorage.getItem(dataKey);
+    const transactions = JSON.parse(response || '[]');
+    const transactionsFormatted: DataListProps[] = transactions.map(
+      (item: DataListProps) => {
+        const amount = Number(item.amount).toLocaleString('pt-BR', {
+          style: 'currency',
+          currency: 'BRL',
+        });
+        const date = new Intl.DateTimeFormat('pt-BR', {
+          day: '2-digit',
+          month: '2-digit',
+          year: '2-digit',
+        }).format(new Date(item.date));
+        return {
+          ...item,
+          amount,
+          date,
+        };
+      },
+    );
+    setData(transactionsFormatted);
+  }
+  useEffect(() => {
+    loadTransactions();
+  }, []);
 
   return (
     <Container>
