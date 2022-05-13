@@ -20,6 +20,7 @@ import {
 } from './styles';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import uuid from 'react-native-uuid';
+import { useNavigation } from '@react-navigation/native';
 
 interface FormData {
   name: string;
@@ -33,6 +34,10 @@ const schema = Yup.object().shape({
     .positive('O valor não pode ser negativo'),
 });
 
+type NavigationProps = {
+  navigate: (screen: string) => void;
+};
+
 export function Register() {
   const dataKey = '@go-finances:transactions';
   const [transactionType, setTransactionType] = useState('');
@@ -45,7 +50,9 @@ export function Register() {
     control,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm({ resolver: yupResolver(schema) });
+  const navigation = useNavigation<NavigationProps>();
   function handleTransactionTypeSelect(type: 'up' | 'down') {
     setTransactionType(type);
   }
@@ -76,6 +83,10 @@ export function Register() {
       const currentRegisters = JSON.parse(registers!) || [];
       const dataFormatted = [...currentRegisters, newTransaction];
       await AsyncStorage.setItem(dataKey, JSON.stringify(dataFormatted));
+      reset();
+      setTransactionType('');
+      setCategory({ key: 'category', name: 'Categoria' });
+      navigation.navigate('Listagem');
     } catch (error) {
       console.log(error);
       Alert.alert('Não foi possível salvar', 'Tente novamente');
