@@ -7,6 +7,8 @@ import { useTheme } from 'styled-components';
 import { VictoryPie } from 'victory-native';
 import { HistoryCard } from '../../components/HistoryCard';
 import { categories } from '../../utils/categories';
+import { addMonths, format, subMonths } from 'date-fns';
+import { ptBR } from 'date-fns/locale';
 import {
   ChartContainer,
   Container,
@@ -38,10 +40,19 @@ interface CategoryData {
 
 export function Resume() {
   const dataKey = '@go-finances:transactions';
+  const [selectedDate, setSelectedDate] = useState(new Date());
   const [totalByCategories, setTotalByCategories] = useState<CategoryData[]>(
     [],
   );
   const theme = useTheme();
+  function handleDateChange(action: 'next' | 'previous') {
+    if (action === 'next') {
+      console.log(addMonths(selectedDate, 1));
+      setSelectedDate(addMonths(selectedDate, 1));
+    } else {
+      setSelectedDate(subMonths(selectedDate, 1));
+    }
+  }
   async function loadData() {
     const registers = await AsyncStorage.getItem(dataKey);
     const registersFormatted: TransactionData[] = JSON.parse(registers!) || [];
@@ -96,11 +107,11 @@ export function Resume() {
           paddingBottom: useBottomTabBarHeight(),
         }}>
         <MonthSelect>
-          <MonthSelectButton>
+          <MonthSelectButton onPress={() => handleDateChange('previous')}>
             <MonthSelectionIcon name='chevron-left' />
           </MonthSelectButton>
-          <Month>Maio</Month>
-          <MonthSelectButton>
+          <Month>{format(selectedDate, 'MMMM, yyyy', { locale: ptBR })}</Month>
+          <MonthSelectButton onPress={() => handleDateChange('next')}>
             <MonthSelectionIcon name='chevron-right' />
           </MonthSelectButton>
         </MonthSelect>

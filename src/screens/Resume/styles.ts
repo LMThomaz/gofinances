@@ -1,5 +1,5 @@
 import { Feather } from '@expo/vector-icons';
-import { BorderlessButton } from 'react-native-gesture-handler';
+import { RectButton } from 'react-native-gesture-handler';
 import { RFValue } from 'react-native-responsive-fontsize';
 import styled from 'styled-components/native';
 
@@ -42,7 +42,7 @@ export const MonthSelectionIcon = styled(Feather)`
   font-size: ${RFValue(24)}px;
 `;
 
-export const MonthSelectButton = styled(BorderlessButton)``;
+export const MonthSelectButton = styled(RectButton)``;
 
 export const Month = styled.Text`
   font-family: ${({ theme }) => theme.fonts.regular};
