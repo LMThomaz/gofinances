@@ -42,7 +42,7 @@ interface CategoryData {
 
 export function Resume() {
   const dataKey = '@go-finances:transactions';
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [totalByCategories, setTotalByCategories] = useState<CategoryData[]>(
     [],
@@ -57,6 +57,7 @@ export function Resume() {
     }
   }
   async function loadData() {
+    setIsLoading(true);
     const registers = await AsyncStorage.getItem(dataKey);
     const registersFormatted: TransactionData[] = JSON.parse(registers!) || [];
     const expensive = registersFormatted.filter(
@@ -94,14 +95,12 @@ export function Resume() {
     setIsLoading(false);
     setTotalByCategories(totalByCategory);
   }
-  useEffect(() => {
-    loadData();
-  }, []);
   useFocusEffect(
     useCallback(() => {
       loadData();
-    }, []),
+    }, [selectedDate]),
   );
+
   return (
     <Container>
       <Header>
