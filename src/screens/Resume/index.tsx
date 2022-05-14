@@ -57,7 +57,10 @@ export function Resume() {
     const registers = await AsyncStorage.getItem(dataKey);
     const registersFormatted: TransactionData[] = JSON.parse(registers!) || [];
     const expensive = registersFormatted.filter(
-      (item) => item.type === 'negative',
+      (item) =>
+        item.type === 'negative' &&
+        new Date(item.date).getMonth() === selectedDate.getMonth() &&
+        new Date(item.date).getFullYear() === selectedDate.getFullYear(),
     );
     const expensiveTotal = expensive.reduce(
       (acc, item) => acc + Number(item.amount),
