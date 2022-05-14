@@ -1,12 +1,13 @@
-import React, { useCallback, useEffect, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { HistoryCard } from '../../components/HistoryCard';
-import { ChartContainer, Container, Content, Header, Title } from './styles';
-import { categories } from '../../utils/categories';
+import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import { useFocusEffect } from '@react-navigation/native';
-import { VictoryPie } from 'victory-native';
+import React, { useCallback, useEffect, useState } from 'react';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { useTheme } from 'styled-components';
+import { VictoryPie } from 'victory-native';
+import { HistoryCard } from '../../components/HistoryCard';
+import { categories } from '../../utils/categories';
+import { ChartContainer, Container, Content, Header, Title } from './styles';
 
 interface TransactionData {
   type: 'positive' | 'negative';
@@ -78,7 +79,12 @@ export function Resume() {
       <Header>
         <Title>Resumo por categoria</Title>
       </Header>
-      <Content>
+      <Content
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{
+          paddingHorizontal: 24,
+          paddingBottom: useBottomTabBarHeight(),
+        }}>
         <ChartContainer>
           <VictoryPie
             data={totalByCategories}
