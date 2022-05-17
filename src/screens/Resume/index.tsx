@@ -136,7 +136,7 @@ export function Resume() {
               colorScale={totalByCategories.map((item) => item.color)}
               style={{
                 labels: {
-                  fontSize: RFValue(18),
+                  fontSize: `${RFValue(18)}px`,
                   fontWeight: 'bold',
                   fill: theme.colors.shape,
                 },
