@@ -9,6 +9,7 @@ import { RFValue } from 'react-native-responsive-fontsize';
 import { useTheme } from 'styled-components';
 import { VictoryPie } from 'victory-native';
 import { HistoryCard } from '../../components/HistoryCard';
+import { useAuth } from '../../hooks/auth';
 import { categories } from '../../utils/categories';
 import {
   ChartContainer,
@@ -41,13 +42,14 @@ interface CategoryData {
 }
 
 export function Resume() {
-  const dataKey = '@go-finances:transactions';
   const [isLoading, setIsLoading] = useState(false);
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [totalByCategories, setTotalByCategories] = useState<CategoryData[]>(
     [],
   );
   const theme = useTheme();
+  const { user } = useAuth();
+  const dataKey = `@go-finances:transactions_user:${user.id}`;
   function handleDateChange(action: 'next' | 'previous') {
     if (action === 'next') {
       console.log(addMonths(selectedDate, 1));

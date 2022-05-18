@@ -45,7 +45,6 @@ interface HighlightData {
 }
 
 export function Dashboard() {
-  const dataKey = '@go-finances:transactions';
   const [isLoading, setIsLoading] = useState(true);
   const [transactions, setTransactions] = useState<DataListProps[]>([]);
   const [highlightData, setHighlightData] = useState<HighlightData>(
@@ -53,6 +52,7 @@ export function Dashboard() {
   );
   const theme = useTheme();
   const { signOut, user } = useAuth();
+  const dataKey = `@go-finances:transactions_user:${user.id}`;
   function getLastTransactionDate(
     collection: DataListProps[],
     type: 'positive' | 'negative',

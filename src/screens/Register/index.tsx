@@ -12,6 +12,7 @@ import {
   InputForm,
   TransactionTypeButton,
 } from '../../components/Forms';
+import { useAuth } from '../../hooks/auth';
 import { CategorySelect } from '../CategorySelect';
 import {
   Container,
@@ -40,13 +41,14 @@ type NavigationProps = {
 };
 
 export function Register() {
-  const dataKey = '@go-finances:transactions';
   const [transactionType, setTransactionType] = useState('');
   const [categoryModalOpen, setCategoryModalOpen] = useState(false);
   const [category, setCategory] = useState({
     key: 'category',
     name: 'Categoria',
   });
+  const { user } = useAuth();
+  const dataKey = `@go-finances:transactions_user:${user.id}`;
   const {
     control,
     handleSubmit,
