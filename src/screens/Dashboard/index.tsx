@@ -52,7 +52,7 @@ export function Dashboard() {
     {} as HighlightData,
   );
   const theme = useTheme();
-  const { signOut } = useAuth();
+  const { signOut, user } = useAuth();
   function getLastTransactionDate(
     collection: DataListProps[],
     type: 'positive' | 'negative',
@@ -156,12 +156,12 @@ export function Dashboard() {
               <UserInfo>
                 <Photo
                   source={{
-                    uri: PHOTO_USER_URI,
+                    uri: user.photo,
                   }}
                 />
                 <User>
                   <UserGreeting>Olá,</UserGreeting>
-                  <UserName>Thomaz</UserName>
+                  <UserName>{user.name}</UserName>
                 </User>
               </UserInfo>
               <LogoutButton onPress={signOut}>
