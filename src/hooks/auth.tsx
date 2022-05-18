@@ -27,6 +27,7 @@ interface IAuthContextData {
   user: User;
   signInWithGoogle(): Promise<void>;
   signInWithApple(): Promise<void>;
+  signOut(): Promise<void>;
   userStorageLoading: boolean;
 }
 
@@ -92,6 +93,10 @@ function AuthProvider(props: AuthProviderProps) {
       throw new Error(error);
     }
   }
+  async function signOut() {
+    setUser({} as User);
+    await AsyncStorage.removeItem(userStorageKey);
+  }
   useEffect(() => {
     async function loadUserStorageData() {
       const userStorage = await AsyncStorage.getItem(userStorageKey);
@@ -106,7 +111,13 @@ function AuthProvider(props: AuthProviderProps) {
 
   return (
     <AuthContext.Provider
-      value={{ user, signInWithGoogle, signInWithApple, userStorageLoading }}>
+      value={{
+        user,
+        signInWithGoogle,
+        signInWithApple,
+        signOut,
+        userStorageLoading,
+      }}>
       {children}
     </AuthContext.Provider>
   );

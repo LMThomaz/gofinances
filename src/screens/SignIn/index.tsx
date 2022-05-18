@@ -1,6 +1,7 @@
-import React from 'react';
-import { Alert } from 'react-native';
+import React, { useState } from 'react';
+import { ActivityIndicator, Alert } from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
+import { useTheme } from 'styled-components';
 import AppleSvg from '../../assets/apple.svg';
 import GoogleSvg from '../../assets/google.svg';
 import LogoSvg from '../../assets/logo.svg';
@@ -17,21 +18,29 @@ import {
 } from './styles';
 
 export function SignIn() {
+  const [isLoading, setIsLoading] = useState(false);
   const { signInWithGoogle, signInWithApple } = useAuth();
+  const theme = useTheme();
   async function handleSignInWithGoogle() {
     try {
-      await signInWithGoogle();
+      setIsLoading(true);
+      return await signInWithGoogle();
     } catch (error) {
       console.log(error);
       Alert.alert('Erro ao fazer login', 'Tente novamente');
+    } finally {
+      setIsLoading(false);
     }
   }
   async function handleSignInWithApple() {
     try {
-      await signInWithApple();
+      setIsLoading(true);
+      return await signInWithApple();
     } catch (error) {
       console.log(error);
       Alert.alert('Erro ao fazer login', 'Tente novamente');
+    } finally {
+      setIsLoading(false);
     }
   }
 
@@ -59,6 +68,15 @@ export function SignIn() {
             svg={AppleSvg}
           />
         </FooterWrapper>
+        {isLoading && (
+          <ActivityIndicator
+            size='large'
+            color={theme.colors.shape}
+            style={{
+              marginTop: RFValue(18),
+            }}
+          />
+        )}
       </Footer>
     </Container>
   );
